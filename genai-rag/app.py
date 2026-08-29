@@ -9,8 +9,12 @@ st.title("Gen AI RAG Assistant (Cloud Ready)")
 # You can swap this for another free model if needed
 from transformers import pipeline
 
-# Use a smaller model for cloud deployment
-qa_model = pipeline("text2text-generation", model="google/flan-t5-small")
+# Try text2text-generation first, fallback to text-generation
+try:
+    qa_model = pipeline("text2text-generation", model="google/flan-t5-small")
+except KeyError:
+    qa_model = pipeline("text-generation", model="google/flan-t5-small")
+
 
 # --- Document Upload ---
 uploaded_file = st.file_uploader("Upload a document", type=["pdf", "docx", "csv"])
